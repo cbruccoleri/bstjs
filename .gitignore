@@ -1,1 +1,4 @@
 # Git Ignore file for BST in Javascript
+
+# ignore installed node_modules
+node_modules
