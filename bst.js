@@ -286,6 +286,29 @@ class BinarySearchTree {
         return arr;
     }
 
+
+    /**
+     * Generate a string representing the tree, printable to console.
+     */
+    stringTree() {
+        let stringTreeRec = (node, treeStr, indentLevel) => {
+            if (node == null) {
+                treeStr += '    '.repeat(indentLevel) + '----[]\n';
+                return treeStr;
+            }
+            else {
+                treeStr += '    '.repeat(indentLevel) + '----[' + String(node.key) + ']\n';
+                const indentStr = '    '.repeat(indentLevel+1)
+                // left branch
+                treeStr = stringTreeRec(node.left, treeStr + indentStr, indentLevel+1);
+                // right branch
+                treeStr = stringTreeRec(node.right, treeStr + indentStr, indentLevel+1);
+                return treeStr;
+            }
+        }
+        return stringTreeRec(this.root, '', 0);
+    }
+
     /** Search the key in the BST, if found return the node containing the key, otherwise `null`. */
     search(key) {
         let node = this.root;
@@ -471,6 +494,93 @@ class BinarySearchTree {
         }
         this._size -= 1;
     }
+}
+
+
+class AVLNode extends BstNode {
+
+    /**
+     * Height of a leaf. This is a convenient value to simplify rebalancing algorithms
+     * because they do not have to check for null values.
+     */
+    LEAF_HEIGHT = -1;
+
+    constructor (key) {
+        super(key);
+        this.avlHeight = AVLNode.LEAF_HEIGHT;
+    }
+
+    _updateHeight() {
+        const leftHeight  = this.left  ? this.left.avlHeight: AVLNode.LEAF_HEIGHT;
+        const rightHeight = this.right ? this.right.avlHeight: AVLNode.LEAF_HEIGHT;
+        this.avlHeight = max(rightHeight, leftHeight) + 1;
+    }
+
+    addLeft(node) {
+        super.addLeft(node);
+        this._updateHeight();
+    }
+
+    addRight(node) {
+        super.addRight(node);
+        this._updateHeight();
+    }
+}
+
+class AVLTree extends BinarySearchTree 
+{
+    constructor() {
+        super();
+    }
+
+    rotateLeft(node) {
+        if (node) {
+            // node.right becomes the new root of the subtree at `node`
+            let y = node.right;
+            this._transplant(y, node);
+            // splice y's left branch to node's right
+            node.addRight(y.left);
+            // splice node to y's left
+            y.addLeft(node);
+            // the height of `y` and `node` has also been updated
+            return y;
+        }
+        else
+            return node;
+    }
+
+    rotateRight(node) {
+        if (node) {
+            // node.left becomes the new root of the subtree at `node`
+            let y = node.left;
+            this._transplant(y, node);
+            // splice y's right branch to node's left
+            node.addLeft(y.right);
+            // splice node to y's right
+            y.addRight(node);
+            // the height of `y` and `node` has also been updated
+            return y;
+        }
+        else
+            return node;
+    }
+
+    rebalance(node) {
+        // TODO: if this node is unbalanced
+        // determine and execute a rotation sequence to rebalance it
+        // walk up the tree and rebalance
+    }
+
+    insert(node, atNode) {
+        // insert as in BST
+        super.insert(node);
+        // TODO: rebalance
+    }
+
+    delete(node) {
+        // TODO: implement
+    }
+
 }
 
 // Export these classes as a Nodejs module (and for tests)

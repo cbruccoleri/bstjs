@@ -18,7 +18,7 @@ const testParams = {
     // maximum value for the pseudo-randomly generated test values
     maxVal: +99,
     // maximum number of values inserted in the tree
-    numElems: 8
+    numElems: 4
 };
 
 /**
@@ -222,6 +222,10 @@ test('inOrderKeys', () => {
     expect(keysVal.length).toBe(values.length);
     expect(checkVal).toBe(0);
 })
+
+test('treeString', () => {
+    console.log(bst.stringTree());
+});
 
 
 test('Delete', () => {
