@@ -568,17 +568,24 @@ class AVLTree extends BinarySearchTree
     rebalance(node) {
         // TODO: if this node is unbalanced
         // determine and execute a rotation sequence to rebalance it
-        // walk up the tree and rebalance
+        // walk up the tree, update heights, and rebalance
     }
 
-    insert(node, atNode) {
+
+    insert(key) {
+        let node = new AVLNode(key);
+        this._insert(node);
+    }
+
+    _insert(node) {
         // insert as in BST
         super.insert(node);
-        // TODO: rebalance
+        this.rebalance(node);
     }
 
     delete(node) {
-        // TODO: implement
+        // TODO: implement - implement full-delete for learning purpose. However,
+        // for practicality, also implement a lazy-delete strategy
     }
 
 }
